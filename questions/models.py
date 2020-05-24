@@ -50,7 +50,9 @@ class Question(models.Model):
         if value.size > 10485760:
             raise ValidationError(u'Size can\'t exceed 10 MB')
 
-    media = models.FileField(upload_to='question_files', validators=[validate_file_type, validate_file_size], null=True,
+    media = models.FileField(upload_to='question_files',
+                             validators=[validate_file_type, validate_file_size],
+                             null=True,
                              blank=True)
 
     def __str__(self):

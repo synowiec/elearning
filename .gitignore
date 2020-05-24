@@ -1,2 +1,5 @@
 /venv/
 /__pycache__/
+/elearning/settings.py
+/questions/__pycache__/
+/static/

@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Learning | Logowanie</title>
+    <link rel="stylesheet" href="{% static 'dashboard/css/bootstrap.min.css' %}">
+</head>
+<body>
+<div class="container justify-content-center">
+    {% if messages %}
+        <div class="row">
+            {% for message in messages %}
+                    <div class="alert alert-danger text-center col-12 shadow" role="alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="row justify-content-center">
+        <h1 class="display-1">E-Learning</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div class="row jumbotron justify-content-center w-50">
+            <h2 class="h2">Logowanie</h2>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col"><label>Nazwa użytkownika</label></div>
+                    <div class="col"><input type="text" name="username"></div>
+                </div>
+                <div class="row">
+                    <div class="col"><label>Hasło</label></div>
+                    <div class="col"><input type="password" name="password"></div>
+                </div>
+                <div class="row justify-content-center pt-4">
+                    <input class="btn btn-primary" type="submit" value="Zaloguj">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+            <p class="text-muted">Nie masz jeszcze konta?
+                <a href="{% url 'questions:register' %}">Zarejestruj się</a>
+    </div>
+</div>
+</body>
+</html>

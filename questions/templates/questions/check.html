@@ -1,40 +1,47 @@
 {% extends 'dashboard/index.html' %}
 
+{% load static %}
+
 {% block content %}
-    <div class="container">
     <div class="row">
-                <div class="alert alert-{{ message_type }} text-center col-12 shadow" role="alert">{{ message }}</div>
-            </div>
-        <div class="row">
-            <h1>{{ question.text }}</h1>
+        <div class="alert alert-{{ message_type }} text-center col-12 shadow" role="alert">{{ message }}</div>
+    </div>
+    <div class="row">
+        <h1>{{ question.text }}</h1>
+    </div>
+    <hr>
+    <div class="row">
+        {% for subcategory in question.subcategory.all %}
+            <span class="badge badge-pill badge-info">{{ subcategory }}</span>
+        {% endfor %}
+    </div>
+    <hr>
+    {% if question.media %}
+        <div class="text-center">
+            <img class="img-fluid rounded" src="{% static question.media.url %}" alt="">
+            <p>{{ question.media.file }}</p>
         </div>
-        <div class="row">
-            {% for subcategory in question.subcategory.all %}
-                <span class="badge badge-pill badge-info">{{ subcategory }}</span>
-            {% endfor %}
-        </div>
-        <div class="row py-4">
-            <ul class="list-group col-12">
-                {% for answer in question.answers.all %}
-                    {% if not answer.inactive %}
-                        <li class="list-group-item
+    {% endif %}
+    <div class="row py-4">
+        <ul class="list-group col-12">
+            {% for answer in question.answers.all %}
+                {% if not answer.inactive %}
+                    <li class="list-group-item
 {% if answer.is_correct %}list-group-item-success{% endif %}
 {% if not answer.is_correct and answer.id in picked %}list-group-item-danger{% endif %}
-{% if answer.id in picked %}font-weight-bold{% endif %}
-">
-                                {{ answer.text }}
-                        </li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="row"><h2>Uzasadnienie</h2></div>
-        <div class="row text-justify pb-4">{{ question.explanation }}</div>
-        <div class="row">
-            <div class="col text-center">
-                <a class="btn btn-primary" href="{% url 'questions:ask' %}" role="button">Losuj następne</a>
-                <a class="btn btn-primary" href="{% url 'questions:index' %}" role="button">Sprawdź statystyki</a>
-            </div>
+{% if answer.id in picked %}font-weight-bold{% endif %}">
+                        {{ answer.text }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="row"><h2>Uzasadnienie</h2></div>
+    <div class="row text-justify pb-4">{{ question.explanation }}</div>
+    <div class="row">
+        <div class="col text-center">
+            <a class="btn btn-primary" href="{% url 'questions:ask' %}" role="button">Losuj następne</a>
+            <a class="btn btn-primary" href="{% url 'questions:index' %}" role="button">Sprawdź statystyki</a>
         </div>
     </div>
 {% endblock content %}

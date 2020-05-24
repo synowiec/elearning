@@ -2,11 +2,7 @@
 
 {% block content %}
     <div class="container">
-        <div class="row">
-            <div class="col text-justify">
                 <h1>Statystyki</h1>
-            </div>
-        </div>
         <div class="row">
             <table class="table">
                 <thead class="thead-dark">
@@ -22,30 +18,30 @@
                 <tbody>
                 {% for category, subcategory in stats.items %}
                     <tr>
-                            <th scope="row" rowspan="{{ subcategory|length }}">{{ category }}</th>
-                    {% for subcategory, param in subcategory.items %}
+                        <th scope="row" rowspan="{{ subcategory|length }}">{{ category }}</th>
+                        {% for subcategory, param in subcategory.items %}
                             <td>{{ subcategory }}</td>
                             <td>{{ param.no_of_questions }}</td>
                             <td>{{ param.no_of_answers }}</td>
                             <td>{{ param.score }}</td>
                             <td>
-                            <div class="border border-success rounded">
-                                <div class="table-success rounded" style="width: {{ param.progress }}%;">
-                                    <div class="text-center">{{ param.progress }}%</div>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ param.progress }}%;" aria-valuenow="{{ param.progress }}"
+                                         aria-valuemin="0" aria-valuemax="100">{{ param.progress }}%
+                                    </div>
                                 </div>
-                            </div>
                             </td>
-                        </tr>
-                    {% endfor %}
+                            </tr>
+                        {% endfor %}
                 {% endfor %}
                 </tbody>
             </table>
         </div>
-    <div class="row">
+        <div class="row">
             <div class="col text-center">
                 <a class="btn btn-primary" href="{% url 'questions:ask' %}" role="button">Losuj następne</a>
             </div>
-    </div>
+        </div>
     </div>
 
 {% endblock content %}

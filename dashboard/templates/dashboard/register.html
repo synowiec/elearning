@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Learning | Rejestracja</title>
+    <link rel="stylesheet" href="{% static 'dashboard/css/bootstrap.min.css' %}">
+</head>
+<body>
+<div class="container justify-content-center">
+    {% if form.errors %}
+        <div class="row">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger text-center col-12 shadow" role="alert">{{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="row justify-content-center">
+        <h1 class="display-1">E-Learning</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div class="row jumbotron justify-content-center w-50">
+            <h2 class="h2">Rejestracja</h2>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col"><label>Nazwa użytkownika</label></div>
+                    <div class="col">{{ form.username }}</div>
+                </div>
+                <div class="row">
+                    <div class="col"><label>Hasło</label></div>
+                    <div class="col">{{ form.password1 }}</div>
+                </div>
+                <div class="row">
+                    <div class="col"><label>Powtórz hasło</label></div>
+                    <div class="col">{{ form.password2 }}</div>
+                </div>
+                <div class="row justify-content-center pt-4">
+                    <input class="btn btn-primary" type="submit" value="Zarejestruj">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+            <p class="text-muted">Masz już konto?
+                <a href="{% url 'questions:login' %}">Zaloguj się</a>
+    </div>
+</div>
+</body>
+</html>

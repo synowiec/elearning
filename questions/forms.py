@@ -1,3 +1,5 @@
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.forms.models import BaseInlineFormSet
 from django import forms
 
@@ -36,3 +38,8 @@ class AnswerFormSet(BaseInlineFormSet):
         elif correct < 1:
             raise forms.ValidationError('At least one correct answer needed.')
 
+
+class RegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password1', 'password2']

@@ -1,15 +1,62 @@
-from urllib.parse import urlencode
+from django.contrib import messages
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic.base import View
 
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
-from django.views import generic
+from .decorators import unauthenticated_user
 from .engine import *
-
-# Create your views here.
-from questions.models import Question
+from .forms import RegisterForm
 
 
+class RegisterPage(View):
+    form = RegisterForm()
+    context = {'form': form}
+
+    @unauthenticated_user
+    def get(self, request):
+        return render(request, 'dashboard/register.html', self.context)
+
+    @unauthenticated_user
+    def post(self, request):
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, 'Konto ' + username + ' zostało utworzone.')
+            return redirect('dashboard/login')
+
+        self.context = {'form': form}
+        return render(request, 'dashboard/register.html', self.context)
+
+
+class LoginPage(View):
+    context = {}
+
+    @unauthenticated_user
+    def get(self, request):
+        return render(request, 'dashboard/login.html', self.context)
+
+    @unauthenticated_user
+    def post(self, request):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('questions:index')
+        else:
+            messages.info(request, 'Użytkownik lub hasło jest nieprawidłowe')
+        return render(request, 'dashboard/login.html', self.context)
+
+
+@login_required(login_url='questions:login')
+def log_out(request):
+    logout(request)
+    return redirect('questions:login')
+
+
+@login_required(login_url='questions:login')
 def index(request):
     # FIXME: replace user
     context = {'stats': calculate_stats(None)}
@@ -17,24 +64,24 @@ def index(request):
     return render(request, 'questions/index.html', context)
 
 
+@login_required(login_url='questions:login')
 def ask(request):
     # FIXME: replace user
     stats = calculate_stats(None)
     categories = slowest_progress(stats)
     # FIXME: replace user
     questions = get_preferred_questions(categories, None)
-    if len(questions) == 0:
+    if not questions:
         return render(request, 'questions/congrats.html')
     question = get_random_question(questions)
-    print(question.media)
     return render(request, 'questions/ask.html', {'question': question})
 
 
+@login_required(login_url='questions:login')
 def check(request):
     question = get_object_or_404(Question, pk=request.POST['question_id'])
     active_answers = question.answers.filter(inactive=False)
     proper_answers = set(answer.id for answer in active_answers.filter(is_correct=True))
-    print(request.POST)
     picked = set(map(int, request.POST.getlist('picked')))
     is_correct = False
     context = {'question': question,

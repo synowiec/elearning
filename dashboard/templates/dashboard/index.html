@@ -1,17 +1,21 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 <head>
     <meta charset="UTF-8">
     <title>E-learning | Nauka Jazdy</title>
     <link rel="stylesheet" href="{% static 'dashboard/css/bootstrap.min.css' %}">
 </head>
-<body>
-{#TODO: navbar implementation: new question, stats, login/logout#}
-<h1>E-learning</h1>
-{% block content %}
+<body class="d-flex flex-column h-100">
+{% include 'dashboard/navbar.html' %}
+<main role="main" class="flex-shrink-0">
+    <div class="container">
+        {% block content %}
 
-{% endblock content %}
+        {% endblock content %}
+    </div>
+</main>
+{% include 'dashboard/footer.html' %}
 </body>
 </html>
