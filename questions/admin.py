@@ -20,7 +20,7 @@ class Questions(admin.ModelAdmin):
     search_fields = ('text', 'answers__text')
     readonly_fields = ('created_by', 'created_at')
     filter_horizontal = ('subcategory',)
-    list_filter = ('created_by', 'created_at', 'subcategory')
+    list_filter = ('subcategory', 'inactive','created_by', 'created_at')
 
     @mark_safe
     def answers_display(self, obj):
