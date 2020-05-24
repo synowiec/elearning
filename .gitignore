@@ -2,3 +2,5 @@
 /elearning/settings.py
 /static/
 !**/__pycache__/
+*.pyc
+*.pyo
