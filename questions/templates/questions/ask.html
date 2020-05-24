@@ -1,0 +1,69 @@
+{% extends 'dashboard/index.html' %}
+
+{% block content %}
+    <style>
+    .list-group-item {
+  user-select: none;
+}
+
+.list-group input[type="checkbox"] {
+  display: none;
+}
+
+.list-group input[type="checkbox"] + .list-group-item {
+  cursor: pointer;
+}
+
+.list-group input[type="checkbox"] + .list-group-item:before {
+  content: "\2713";
+  color: transparent;
+  font-weight: bold;
+  margin-right: 1em;
+}
+
+.list-group input[type="checkbox"]:checked + .list-group-item {
+  background-color: #0275D8;
+  color: #FFF;
+}
+
+.list-group input[type="checkbox"]:checked + .list-group-item:before {
+  color: inherit;
+}
+    </style>
+    <div class="container">
+        {% if error %}
+            <div class="row">
+                <div class="alert alert-danger text-center col-12 shadow" role="alert">{{ error }}</div>
+            </div>{% endif %}
+        <div class="row">
+            <h1>{{ question.text }}</h1>
+        </div>
+        <div class="row">{% for subcategory in question.subcategory.all %}
+            <span class="badge badge-pill badge-info">{{ subcategory }}</span>
+        {% endfor %}</div>
+        <div class="row"><img src="" alt=""></div>
+        <form action="{% url 'questions:check' %}" method="post">
+            {% csrf_token %}
+            <div class="container py-4">
+                <div class="list-group">
+                    {% for answer in question.answers.all %}
+                        {% if not answer.inactive %}
+                                    <input type="checkbox" name="picked"
+                                           id="answer-{{ forloop.counter }}"
+                                           value="{{ answer.id }}" />
+                            <label class="list-group-item" for="answer-{{ forloop.counter }}">
+                                        {{ answer.text }}
+                                    </label>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <input name="question_id" type="hidden" value="{{ question.id }}">
+            <div class="row">
+                <div class="col text-center">
+                    <button class="btn btn-primary" type="submit">Sprawdź</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

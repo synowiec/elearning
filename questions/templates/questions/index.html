@@ -1,0 +1,51 @@
+{% extends 'dashboard/index.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col text-justify">
+                <h1>Statystyki</h1>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Kategoria</th>
+                    <th scope="col">Subkategoria</th>
+                    <th scope="col">Pytań</th>
+                    <th scope="col">Prób</th>
+                    <th scope="col">Poprawne</th>
+                    <th scope="col">Postęp</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for category, subcategory in stats.items %}
+                    <tr>
+                            <th scope="row" rowspan="{{ subcategory|length }}">{{ category }}</th>
+                    {% for subcategory, param in subcategory.items %}
+                            <td>{{ subcategory }}</td>
+                            <td>{{ param.no_of_questions }}</td>
+                            <td>{{ param.no_of_answers }}</td>
+                            <td>{{ param.score }}</td>
+                            <td>
+                            <div class="border border-success rounded">
+                                <div class="table-success rounded" style="width: {{ param.progress }}%;">
+                                    <div class="text-center">{{ param.progress }}%</div>
+                                </div>
+                            </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    <div class="row">
+            <div class="col text-center">
+                <a class="btn btn-primary" href="{% url 'questions:ask' %}" role="button">Losuj następne</a>
+            </div>
+    </div>
+    </div>
+
+{% endblock content %}

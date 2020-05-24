@@ -1,0 +1,13 @@
+{% extends 'dashboard/index.html' %}
+
+{% block content %}
+
+    <div class="row">
+    <div class="col text-center">
+        <h1 class="display-1">Gratulacje!</h1>
+        <p class="h1">Udało Ci się w pełni opanować materiał dostępny na tej platformie.</p>
+                <a class="btn btn-primary" href="{% url 'questions:index' %}" role="button">Statystyki</a>
+    </div>
+    </div>
+
+{% endblock %}
