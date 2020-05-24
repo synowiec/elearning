@@ -42,9 +42,10 @@ class Question(models.Model):
     subcategory = models.ManyToManyField(Subcategory)
 
     def validate_file_type(value):
-        if value.file.content_type not in ('image/png', 'image/bmp', 'image/jpeg', 'image/gif',
-                                           'video/mpeg', 'video/mp4', 'video/quicktime'):
-            raise ValidationError(u'Wrong type of file. Accepted extensions: png, bmp, jpeg, gif, mpeg, mp4, qt')
+        if hasattr(value.file, 'content_type'):
+            if value.file.content_type not in ('image/png', 'image/bmp', 'image/jpeg', 'image/gif',
+                                               'video/mpeg', 'video/mp4', 'video/quicktime'):
+                raise ValidationError(u'Wrong type of file. Accepted extensions: png, bmp, jpeg, gif, mpeg, mp4, qt')
 
     def validate_file_size(value):
         if value.size > 10485760:
