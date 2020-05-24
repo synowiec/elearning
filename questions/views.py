@@ -58,19 +58,17 @@ def log_out(request):
 
 @login_required(login_url='questions:login')
 def index(request):
-    # FIXME: replace user
-    context = {'stats': calculate_stats(None)}
+    context = {'stats': calculate_stats(request.user)}
 
     return render(request, 'questions/index.html', context)
 
 
 @login_required(login_url='questions:login')
 def ask(request):
-    # FIXME: replace user
-    stats = calculate_stats(None)
+    user = request.user
+    stats = calculate_stats(user)
     categories = slowest_progress(stats)
-    # FIXME: replace user
-    questions = get_preferred_questions(categories, None)
+    questions = get_preferred_questions(categories, user)
     if not questions:
         return render(request, 'questions/congrats.html')
     question = get_random_question(questions)
@@ -102,7 +100,6 @@ def check(request):
         context['message'] = 'Błędna odpowiedź.'
         context['message_type'] = 'danger'
 
-    # FIXME: replace user
-    log_answer(None, question, picked, is_correct)
+    log_answer(request.user, question, picked, is_correct)
 
     return render(request, 'questions/check.html', context)
