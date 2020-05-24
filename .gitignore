@@ -1,4 +1,6 @@
 /venv/
-!**/__pycache__/
 /elearning/settings.py
 /static/
+!**/__pycache__/
+*.pyc
+*.pyo

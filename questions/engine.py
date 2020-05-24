@@ -11,10 +11,9 @@ def get_active_questions():
 
 
 def get_latest_proper_answered_question(user):
-    # TODO user handling
     return AnswerHistory.objects.filter(Q(question__inactive=False)
-                                      # & Q(user=user)
-                                      )
+                                        & Q(created_by=user)
+                                        )
 
 
 def get_active_categories():
@@ -52,8 +51,8 @@ def calculate_stats(user):
                                )
         if len(total) > 0:
             stats[category][subcategory]['score'] = total[0]['total']
-        stats[category][subcategory]['progress'] = round(
-            stats[category][subcategory]['score'] / stats[category][subcategory]['no_of_questions'] * 100, 2)
+        stats[category][subcategory]['progress'] = int(round(
+            stats[category][subcategory]['score'] / stats[category][subcategory]['no_of_questions'] * 100, 0))
     return stats
 
 

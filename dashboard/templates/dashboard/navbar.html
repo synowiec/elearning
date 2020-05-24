@@ -17,6 +17,7 @@ body {
         <a class="nav-link" href="{% url 'questions:ask' %}">Losuj pytanie</a>
       </li>
     </ul>
-      <a href="{% url 'questions:logout' %}" class="btn btn-outline-primary">Wyloguj</a>
+      <span class="navbar-text">Cześć {{ user }}!</span>
+      <a href="{% url 'questions:logout' %}" class="btn btn-outline-primary mx-1">Wyloguj</a>
   </div>
 </nav>
