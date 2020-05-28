@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.base import View
 
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user, staff_user
 from .engine import *
 from .forms import RegisterForm
 
@@ -24,18 +24,16 @@ class RegisterPage(View):
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, 'Konto ' + username + ' zostało utworzone.')
-            return redirect('dashboard/login')
+            return redirect('questions:index')
 
         self.context = {'form': form}
         return render(request, 'dashboard/register.html', self.context)
 
 
 class LoginPage(View):
-    context = {}
-
     @unauthenticated_user
     def get(self, request):
-        return render(request, 'dashboard/login.html', self.context)
+        return render(request, 'dashboard/login.html')
 
     @unauthenticated_user
     def post(self, request):
@@ -47,7 +45,7 @@ class LoginPage(View):
             return redirect('questions:index')
         else:
             messages.info(request, 'Użytkownik lub hasło jest nieprawidłowe')
-        return render(request, 'dashboard/login.html', self.context)
+        return render(request, 'dashboard/login.html')
 
 
 @login_required(login_url='questions:login')
@@ -58,11 +56,14 @@ def log_out(request):
 
 @login_required(login_url='questions:login')
 def index(request):
+    if request.user.is_staff:
+        context = {'stats': students_stats()}
+        return render(request, 'questions/progress.html', context)
     context = {'stats': calculate_stats(request.user)}
-
     return render(request, 'questions/index.html', context)
 
 
+@staff_user
 @login_required(login_url='questions:login')
 def ask(request):
     user = request.user
@@ -75,8 +76,11 @@ def ask(request):
     return render(request, 'questions/ask.html', {'question': question})
 
 
+@staff_user
 @login_required(login_url='questions:login')
 def check(request):
+    if request.method == 'GET':
+        return redirect('questions:ask')
     question = get_object_or_404(Question, pk=request.POST['question_id'])
     active_answers = question.answers.filter(inactive=False)
     proper_answers = set(answer.id for answer in active_answers.filter(is_correct=True))

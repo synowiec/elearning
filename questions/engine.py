@@ -1,5 +1,7 @@
 from pprint import pprint
 
+from django.contrib.auth.models import User
+
 from .models import AnswerHistory, Answer, Question
 from django.db.models import Max, Q, Count
 from itertools import combinations
@@ -108,3 +110,21 @@ def log_answer(user, question, answers, is_correct):
     for a in match_answers:
         answer.selected_answers.add(a)
     answer.save()
+
+
+def students_stats():
+    students = User.objects.filter(is_active=True, is_staff=False)
+    s = {}
+    for student in students:
+        cs = calculate_stats(student)
+        questions = 0
+        scores = 0
+        for category in cs:
+            for subcategory in cs[category]:
+                questions += (cs[category][subcategory]['no_of_questions'])
+                scores += (cs[category][subcategory]['score'])
+        progress = int(round(scores / questions * 100, 0))
+        s[student.username] = {
+            'progress': progress
+        }
+    return s

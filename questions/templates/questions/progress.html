@@ -1,0 +1,32 @@
+{% extends 'dashboard/index.html' %}
+
+{% block content %}
+    <div class="container">
+                <h1>Postępy użytkowników</h1>
+        <div class="row">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Użytkownik</th>
+                    <th scope="col">Progres</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                        {% for username, param in stats.items %}
+                            <td>{{ username }}</td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ param.progress }}%;" aria-valuenow="{{ param.progress }}"
+                                         aria-valuemin="0" aria-valuemax="100">{{ param.progress }}%
+                                    </div>
+                                </div>
+                            </td>
+                            </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock content %}
