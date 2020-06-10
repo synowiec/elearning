@@ -78,3 +78,4 @@ class AnswerHistory(models.Model):
     is_correct = models.BooleanField()
     question = models.ForeignKey(Question, related_name='historical_question', on_delete=models.CASCADE)
     selected_answers = models.ManyToManyField(Answer)
+

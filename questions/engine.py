@@ -65,7 +65,7 @@ def slowest_progress(stats):
         for subcategory in stats[category]:
             sp = stats[category][subcategory]['progress']
             if sp == 100:
-                break
+                continue
             elif sp < progress:
                 progress = sp
                 categories.clear()

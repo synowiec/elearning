@@ -12,7 +12,7 @@
     {% if messages %}
         <div class="row">
             {% for message in messages %}
-                    <div class="alert alert-danger text-center col-12 shadow" role="alert">{{ message }}</div>
+                    <div class="alert alert-{% if message.tags == 'success' %}success{% else %}danger{% endif %} text-center col-12 shadow" role="alert">{{ message }}</div>
             {% endfor %}
         </div>
     {% endif %}

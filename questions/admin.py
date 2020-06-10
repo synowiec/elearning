@@ -72,13 +72,16 @@ class Subcategories(admin.TabularInline):
 
 class Categories(admin.ModelAdmin):
     inlines = [Subcategories]
-    list_display = ('_text', 'subcategory_display', 'created_by', 'created_at')
+    list_display = ('_text', 'subcategory_display', 'created_by', 'created_at', 'inactive')
     readonly_fields = ('created_by', 'created_at')
     search_fields = ('text', 'category_subcategory__text')
     list_filter = ('created_by', 'created_at')
 
+    @mark_safe
     def subcategory_display(self, obj):
-        return ", ".join([child.text for child in obj.category_subcategory.all()])
+        return ", ".join([
+            ('<del>' + child.text + '</del>' if child.inactive else child.text)
+            for child in obj.category_subcategory.all()])
 
     subcategory_display.short_description = 'Subcategories'
 
